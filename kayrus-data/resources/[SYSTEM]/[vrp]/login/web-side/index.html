@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>#creativerp</title>
+		<script src="nui://game/ui/jquery.js"></script>
+		<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+		<style>
+			#index {
+				margin: 30px;
+				display: block;
+				position: absolute;
+			}
+
+			.spawnNow {
+				float: left;
+				width: 300px;
+				padding: 20px;
+				color: #8ebda3;
+				font-size: 16px;
+				font-weight: 300;
+				transition: all 1s;
+				text-align: center;
+				list-style: none;
+				user-select: none;
+				border-radius: 3px;
+				background: #2e6e4c;
+				letter-spacing: 5px;
+				margin-bottom: 10px;
+				text-transform: uppercase;
+				text-shadow: 0 1px #1b402c;
+				box-shadow: 0 1px 0 #235239;
+				font-family: 'Roboto',sans-serif;
+			}
+
+			.spawnNow:hover {
+				background: #39875e;
+			}
+
+			.spawn {
+				color: #979696;
+				width: 310px;
+				padding: 15px;
+				list-style: none;
+				user-select: none;
+				font-size: 13px;
+				text-align: center;
+				transition: all 1s;
+				border-radius: 3px;
+				margin-bottom: 10px;
+				text-transform: uppercase;
+				transition: width 0.5s;
+				background: #292c38;
+				letter-spacing: 3px;
+				text-shadow: 0 1px #232630;
+				font-family: 'Roboto',sans-serif;
+			}
+
+			.spawn:hover {
+				background: #343a46;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="index">
+		</div>
+
+		<script>
+			$(document).ready(function(){
+				window.addEventListener("message",function(event){
+					if (event["data"]["result"] !== undefined){
+                        $.each(event["data"]["result"],(k,v) => {
+                            $("#index").append(`
+                                <li class="spawn" id="spawn" data-spawn="${k}">${v[3]}</li>
+                            `);
+                        });
+                        $("#index").append(`<li class="spawnNow" id="spawn" data-spawn="spawn">Confirmar</li>`)
+                    }
+
+					if (event["data"]["display"]){
+						$("#index").show();
+					} else {
+						$("#index").hide();
+					}
+				});
+
+				$(document).on("click","#spawn",function(e){
+					$.post("http://login/spawn",JSON.stringify({ choice: e["target"]["dataset"]["spawn"] }));
+				});
+			})
+		</script>
+	</body>
+</html>
